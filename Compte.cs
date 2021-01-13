@@ -16,7 +16,8 @@ namespace dataBinding_Banque
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["monCon"].ConnectionString;
         SqlConnection connection = new SqlConnection(connectionString);
-        SqlDataAdapter adapter;
+        SqlDataAdapter CompteAdapter;
+        SqlDataAdapter ClientAdapter;
         DataSet dataset = new DataSet();
         BindingManagerBase bindingManagerBase;
         bool someThingChanged = false;
@@ -28,10 +29,10 @@ namespace dataBinding_Banque
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            adapter = new SqlDataAdapter("select * from compte;", connection);
-            adapter.Fill(dataset, "compte");
-            adapter.SelectCommand.CommandText = "select * from client";
-            adapter.Fill(dataset, "client");
+            CompteAdapter = new SqlDataAdapter("select * from compte;", connection);
+            CompteAdapter.Fill(dataset, "compte");
+            ClientAdapter = new SqlDataAdapter("select * from client;", connection);
+            ClientAdapter.Fill(dataset, "client");
 
             bindingManagerBase = BindingContext[dataset.Tables["compte"]];
 
@@ -107,12 +108,12 @@ namespace dataBinding_Banque
             if (someThingChanged)
             {
                 DialogResult result = MessageBox.Show("voulez vous sauvgarder les changement", "sauvgarder", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                if (result == DialogResult.OK)
+                if (result == DialogResult.Yes)
                 {
                     try
                     {
-                        SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
-                        adapter.Update(dataset.Tables["compte"]);
+                        SqlCommandBuilder builder = new SqlCommandBuilder(CompteAdapter);
+                        CompteAdapter.Update(dataset.Tables["compte"]);
                     }catch(Exception ex)
                     {
                         MessageBox.Show("Erreur : "+ex.Message);

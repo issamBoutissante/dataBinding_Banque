@@ -16,7 +16,7 @@ namespace dataBinding_Banque
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Compte());
+            Application.Run(new GestionBanque());
         }
     }
 }
